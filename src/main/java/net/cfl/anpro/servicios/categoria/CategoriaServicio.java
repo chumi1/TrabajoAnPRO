@@ -1,9 +1,12 @@
 package net.cfl.anpro.servicios.categoria;
+
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import net.cfl.anpro.excepciones.CategoriaExistenteEx;
 import net.cfl.anpro.excepciones.RecursosNoEncontradoEx;
 import net.cfl.anpro.modelo.Categoria;
 import net.cfl.anpro.repositorio.CategoriaRepositorio;
@@ -13,41 +16,54 @@ import net.cfl.anpro.repositorio.CategoriaRepositorio;
 public class CategoriaServicio implements ICategoriaServicio{
 	
 	private final CategoriaRepositorio categoriaRepositorio;
-
+	
 	@Override
-	public Categoria listaCategoriaPorId(Long Id) {
-		return categoriaRepositorio.findById(Id)
-				.orElseThrow(() -> new RecursosNoEncontradoEx("Categoria No Encontrada"));	
+	public Categoria listaCategoriaPorId(Long id) {
+		return categoriaRepositorio.findById(id)
+				.orElseThrow(() -> new RecursosNoEncontradoEx("Categoria no encontrada"));
 	}
-
 	@Override
 	public Categoria listaCategoriaPorNombre(String nombre) {
-		// TODO Auto-generated method stub
-		return null;
+		return categoriaRepositorio.findByNombre(nombre);
 	}
-
+	
+	/*
+	 * Lista Todas las categorias
+	 * */
 	@Override
 	public List<Categoria> listarCategorias() {
-		// TODO Auto-generated method stub
-		return null;
+		return categoriaRepositorio.findAll();
 	}
 
 	@Override
-	public Categoria arreglaCategoria(Categoria categoria) {
-		// TODO Auto-generated method stub
-		return null;
+	public Categoria agregaCategoria(Categoria categoria) {
+		return Optional.of(categoria)
+				.filter(c -> ! categoriaRepositorio.existsByNombre(c.getNombre()))
+				.map(categoriaRepositorio::save)
+				.orElseThrow(() -> new CategoriaExistenteEx(categoria.getNombre() + " ya existe en la base de datos"));
 	}
 
+	/*
+	 * Actualiza la categoria a travez de su id
+	 * */
 	@Override
-	public Categoria actualizaCategoria(Categoria categoria) {
-		// TODO Auto-generated method stub
-		return null;
+	public Categoria actualizaCategoria(Categoria categoriaNueva, Long id) {
+		return Optional.ofNullable(listaCategoriaPorId(id)).map(categoriaVieja -> {
+			categoriaVieja.setNombre(categoriaNueva.getNombre());
+			return categoriaRepositorio.save(categoriaVieja);
+		}).orElseThrow(() -> new RecursosNoEncontradoEx("Categoria no encontrada"));
 	}
-
+	/*
+	 * Borra una categoria, por id
+	 * Le eviamos el id de la categoria y lo borra
+	 * en el caso de que exista 
+	 * */
 	@Override
-	public void borrrarCateogoriaPorId(Long id) {
-		// TODO Auto-generated method stub
-		
+	public void borrarCategoriaPorId(Long id) {
+		categoriaRepositorio.findById(id)
+			.ifPresentOrElse(categoriaRepositorio::delete, () ->{
+				new RecursosNoEncontradoEx("Categoria no encontrada");
+			});
 	}
 
 }

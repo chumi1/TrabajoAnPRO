@@ -6,4 +6,6 @@ import net.cfl.anpro.modelo.Categoria;
 
 public interface CategoriaRepositorio extends JpaRepository<Categoria, Long>{
 	Categoria findByAtCategoria(String nombre);
+	Categoria findByNombre(String nombre);
+	boolean existsByNombre(String nombre);
 }
