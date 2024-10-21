@@ -23,7 +23,7 @@ public class ProductoServicio implements IProductoServicio{
 	
 	@Override
 	public Producto agregaProducto(AgregaProductoReq request){
-		Categoria categoria = Optional.ofNullable(categoriaRepositorio.findByAtCategoria(request.getCategoria().getNombre()))
+		Categoria categoria = Optional.ofNullable(categoriaRepositorio.findByNombre(request.getCategoria().getNombre()))
 				.orElseGet(() -> {
 					Categoria nuevaCategoria = new Categoria(request.getCategoria().getNombre());
 							return categoriaRepositorio.save(nuevaCategoria);
@@ -42,21 +42,18 @@ public class ProductoServicio implements IProductoServicio{
 				categoria
 				);
 	}
-
 	@Override
 	public Producto listaProductoPorId(Long id) {
 	
 		return productoRepositorio.findById(id)
 				.orElseThrow(() -> new ProductoNoEncontradoEx("Producto no encontrado"));
 	}
-
 	@Override
 	public void borrarProducto(Long id) {
 		productoRepositorio.findById(id)
 		.ifPresentOrElse((productoRepositorio::delete), 
 		()-> new ProductoNoEncontradoEx("Producto no encontrado"));
 	}
-
 	@Override
 	public Producto actualizaProducto(ActualizaProductoReq request, Long productoId) {
 		return productoRepositorio.findById(productoId)
@@ -70,13 +67,10 @@ public class ProductoServicio implements IProductoServicio{
 		productoExistente.setDescripcion(request.getDescripcion());
 		productoExistente.setPrecio(request.getPrecio());
 		productoExistente.setStock(request.getStock());
-		Categoria categoria = categoriaRepositorio.findByAtCategoria(request.getCategoria().getNombre());
+		Categoria categoria = categoriaRepositorio.findByNombre(request.getCategoria().getNombre());
 		productoExistente.setCategoria(categoria);
 		return productoExistente;
 	}
-	
-	
-	
 	@Override
 	public List<Producto> listarProductos() {
 		return productoRepositorio.findAll();
@@ -84,7 +78,7 @@ public class ProductoServicio implements IProductoServicio{
 
 	@Override
 	public List<Producto> listarPorCategoria(String categoria) {
-		return productoRepositorio.findByAtCategoria(categoria);
+		return productoRepositorio.findByCategoria(categoria);
 	}
 
 	@Override
@@ -94,7 +88,7 @@ public class ProductoServicio implements IProductoServicio{
 
 	@Override
 	public List<Producto> listarPorMarcaYCategoria(String marca, String categoria) {
-		return productoRepositorio.findByMarcaYAtCategoria(marca, categoria);
+		return productoRepositorio.findByMarcaAndCategoriaNombre(marca, categoria);
 	}
 
 	@Override
@@ -104,12 +98,11 @@ public class ProductoServicio implements IProductoServicio{
 
 	@Override
 	public List<Producto> listarPorNombreYMarca(String nombre, String marca) {
-		return productoRepositorio.findByNombreYMarca(nombre, marca);
+		return productoRepositorio.findByNombreAndMarca(nombre, marca);
 	}
 
 	@Override
 	public Long contarProductosPorNombreYMarca(String nombre, String marca) {
- 		return productoRepositorio.countByNombreYMarca(nombre, marca);
+ 		return productoRepositorio.countByNombreAndMarca(nombre, marca);
 	}
-
 }
