@@ -33,7 +33,7 @@ import net.cfl.anpro.servicios.imagen.IImagenServicio;
 public class ImagenControlador {
 	private final IImagenServicio imagenServicio;
 	@PostMapping("/upload")
-	public ResponseEntity<ApiRespuesta> guardaImaganes(@RequestParam List<MultipartFile> archivos,Long idProducto){
+	public ResponseEntity<ApiRespuesta> guardaImaganes(@RequestParam List<MultipartFile> archivos,@RequestParam Long idProducto){
 		try {
 			List<ImagenDto> imagenesDto = imagenServicio.guardaImagenes(archivos, idProducto);
 			return ResponseEntity.ok(new ApiRespuesta ("imagen subida correctamente", imagenesDto));

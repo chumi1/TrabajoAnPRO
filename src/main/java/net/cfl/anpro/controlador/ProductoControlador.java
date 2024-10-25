@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
+import net.cfl.anpro.dto.ProductoDto;
 import net.cfl.anpro.excepciones.RecursosNoEncontradoEx;
 import net.cfl.anpro.modelo.Producto;
 import net.cfl.anpro.repositorio.AgregaProductoReq;
@@ -21,19 +22,21 @@ import net.cfl.anpro.servicios.producto.IProductoServicio;
 
 @RequiredArgsConstructor 
 @RestController
-@RequestMapping("${api.prefix}/Productos") 
+@RequestMapping("/api/v1/productos") 
 public class ProductoControlador {
 	private final IProductoServicio productoServicio;
 	@GetMapping ("/todos")
 	public ResponseEntity<ApiRespuesta> listaTodosProductos(){
 		List<Producto> productos = productoServicio.listarProductos();	
+		List<ProductoDto> productosConvertidos = productoServicio.traeProductosConvertidos(productos);
          return ResponseEntity.ok(new ApiRespuesta("Exito!", productos));
 	}
 	@GetMapping("/producto/{prodctoId}/producto")
 	public ResponseEntity<ApiRespuesta> listarProductoPorId(@PathVariable Long productoId){
 		try {
 			Producto producto= productoServicio.listaProductoPorId(productoId);
-			return ResponseEntity.ok(new ApiRespuesta("Exito!", producto));
+			ProductoDto productoConvertido  = productoServicio.convertirAProductoDto(producto);
+			return ResponseEntity.ok(new ApiRespuesta("Exito!", productoConvertido));
 		} catch (RecursosNoEncontradoEx e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(new ApiRespuesta(e.getMessage(), null));
@@ -43,6 +46,7 @@ public class ProductoControlador {
 	public ResponseEntity<ApiRespuesta> agregarProducto(@RequestBody AgregaProductoReq producto ){
 		try {
 			Producto elProducto = productoServicio.agregaProducto(producto);
+			ProductoDto productoConvertido  = productoServicio.convertirAProductoDto(producto);
 			return ResponseEntity.ok(new ApiRespuesta("Producto Agregado", elProducto));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -77,6 +81,7 @@ public class ProductoControlador {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
 						.body(new ApiRespuesta("No se encontraron productos", null));
 			}
+			List<ProductoDto> productosConvertidos = productoServicio.traeProductosConvertidos(productos);
 			return ResponseEntity.ok(new ApiRespuesta("Exito", productos));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -91,6 +96,7 @@ public class ProductoControlador {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
 						.body(new ApiRespuesta("No se encontraron productos", null));
 			}
+			List<ProductoDto> productosConvertidos = productoServicio.traeProductosConvertidos(productos);
 			return ResponseEntity.ok(new ApiRespuesta("Exito", productos));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -105,6 +111,7 @@ public class ProductoControlador {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
 						.body(new ApiRespuesta("No se encontraron productos", null));
 			}
+			List<ProductoDto> productosConvertidos = productoServicio.traeProductosConvertidos(productos);
 			return ResponseEntity.ok(new ApiRespuesta("Exito", productos));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -119,6 +126,7 @@ public class ProductoControlador {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
 						.body(new ApiRespuesta("No se encontraron productos", null));
 			}
+			List<ProductoDto> productosConvertidos = productoServicio.traeProductosConvertidos(productos);
 			return ResponseEntity.ok(new ApiRespuesta("Exito", productos));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -133,6 +141,7 @@ public class ProductoControlador {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
 						.body(new ApiRespuesta("No se encontraron productos", null));
 			}
+			List<ProductoDto> productosConvertidos = productoServicio.traeProductosConvertidos(productos);
 			return ResponseEntity.ok(new ApiRespuesta("Exito", productos));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

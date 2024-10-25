@@ -1,0 +1,39 @@
+ {
+	"nombre": "TV",
+   "marca": "Samsung",
+   "precio":"10000",
+   "categoria":"electronica",
+   "descripcion":"TV SMART 20 pulgadas",
+   "stock":"20"
+   
+   }
+   
+   {
+   "nombre": "TV",
+     "marca": "LG",
+     "precio":"100000",
+     "categoria":"electronica",
+     "descripcion":"TV SMART 40 pulgadas",
+     "stock":"20"
+     
+     }
+	 
+	 {
+	 "nombre": "telefono",
+	   "marca": "Samsung",
+	   "precio":"140000",
+	   "categoria":"comunicaciones",
+	   "descripcion":"20 gigas",
+	   "stock":"20"
+	   
+	   }
+	   
+	   {
+	   "nombre": "telefono",
+	     "marca": "motorola",
+	     "precio":"420000",
+	     "categoria":"electronica",
+	     "descripcion":"10 gigas,
+	     "stock":"20"
+	     
+	     }

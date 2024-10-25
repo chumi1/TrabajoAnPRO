@@ -3,14 +3,19 @@ package net.cfl.anpro.servicios.producto;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import net.cfl.anpro.dto.ImagenDto;
+import net.cfl.anpro.dto.ProductoDto;
 import net.cfl.anpro.excepciones.ProductoNoEncontradoEx;
 import net.cfl.anpro.modelo.Categoria;
+import net.cfl.anpro.modelo.Imagen;
 import net.cfl.anpro.modelo.Producto;
 import net.cfl.anpro.repositorio.AgregaProductoReq;
 import net.cfl.anpro.repositorio.CategoriaRepositorio;
+import net.cfl.anpro.repositorio.ImagenRepositorio;
 import net.cfl.anpro.repositorio.ProductoRepositorio;
 import net.cfl.anpro.request.ActualizaProductoReq; 
  
@@ -20,6 +25,8 @@ public class ProductoServicio implements IProductoServicio{
 	
 	private final ProductoRepositorio productoRepositorio;
 	private final CategoriaRepositorio categoriaRepositorio;
+	private final ModelMapper modelMapper;
+	private final ImagenRepositorio imagenRepositorio;
 	
 	@Override
 	public Producto agregaProducto(AgregaProductoReq request){
@@ -78,7 +85,7 @@ public class ProductoServicio implements IProductoServicio{
 
 	@Override
 	public List<Producto> listarPorCategoria(String categoria) {
-		return productoRepositorio.findByCategoria(categoria);
+		return productoRepositorio.findByCategoriaNombre(categoria);
 	}
 
 	@Override
@@ -104,5 +111,21 @@ public class ProductoServicio implements IProductoServicio{
 	@Override
 	public Long contarProductosPorNombreYMarca(String nombre, String marca) {
  		return productoRepositorio.countByNombreAndMarca(nombre, marca);
+	}
+	@Override
+	public List<ProductoDto> traeProductosConvertidos(List<Producto> productos){
+		return productos.stream().map(this :: convertirAProductoDto).toList();
+	}
+	@Override
+	public ProductoDto convertirAProductoDto(Producto producto) {
+		ProductoDto productoDto = modelMapper.map(producto, ProductoDto.class);
+		List<Imagen> imagenes = imagenRepositorio.findByProductoId(producto.getId());
+		List<ImagenDto> imagenesDto = imagenes
+				.stream()
+				.map(imagen -> modelMapper.map(imagenes, ImagenDto.class))
+				.toList();
+		productoDto.setImagenes(imagenesDto);
+		return productoDto;
+		
 	}
 }

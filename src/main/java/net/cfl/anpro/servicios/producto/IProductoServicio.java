@@ -3,6 +3,7 @@ package net.cfl.anpro.servicios.producto;
 import java.util.List;
 import java.util.Optional;
 
+import net.cfl.anpro.dto.ProductoDto;
 import net.cfl.anpro.modelo.Producto;
 import net.cfl.anpro.repositorio.AgregaProductoReq;
 import net.cfl.anpro.request.ActualizaProductoReq;
@@ -19,4 +20,6 @@ public interface IProductoServicio {
 	List<Producto> listarPorNombre(String nombre);
 	List<Producto> listarPorNombreYMarca(String nombre, String marca);
 	Long contarProductosPorNombreYMarca(String nombre, String marca);
+	ProductoDto convertirAProductoDto(AgregaProductoReq producto);
+	List<ProductoDto> traeProductosConvertidos(List<Producto> productos);
 }
