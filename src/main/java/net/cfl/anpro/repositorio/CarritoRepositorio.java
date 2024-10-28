@@ -1,5 +1,11 @@
 package net.cfl.anpro.repositorio;
 
-public interface CarritoRepositorio {
+import org.springframework.data.jpa.repository.JpaRepository;
 
+import net.cfl.anpro.modelo.Carrito;
+
+public interface CarritoRepositorio extends JpaRepository<Carrito, Long>{
+	void deleteById(Long id);
+
+	
 }
