@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import net.cfl.anpro.dto.ProductoDto;
@@ -46,7 +47,7 @@ public class ProductoControlador {
 	public ResponseEntity<ApiRespuesta> agregarProducto(@RequestBody AgregaProductoReq producto ){
 		try {
 			Producto elProducto = productoServicio.agregaProducto(producto);
-			ProductoDto productoConvertido  = productoServicio.convertirAProductoDto(producto);
+			ProductoDto productoConvertido  = productoServicio.convertirAProductoDto(elProducto);
 			return ResponseEntity.ok(new ApiRespuesta("Producto Agregado", elProducto));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -74,7 +75,7 @@ public class ProductoControlador {
 		}
 	}
 	@GetMapping("/por/marca-y-nombre")
-	public ResponseEntity<ApiRespuesta> listarPorMarcaYNombre(@RequestBody String marcaNombre, String productoNombre) {
+	public ResponseEntity<ApiRespuesta> listarPorMarcaYNombre(@RequestParam String marcaNombre, @RequestParam String productoNombre) {
 		try {
 			List<Producto> productos = productoServicio.listarPorNombreYMarca(productoNombre, marcaNombre);
 			if(productos.isEmpty()) {

@@ -43,19 +43,19 @@ public class CarritoItemServicio implements ICarritoItemServicio{
 		Carrito carrito = carritoServicio.traeCarrito(carritoId);
 		CarritoItem itemARemover = carrito.getCarritoItems()
 				.stream()
-				.filter(item -> getProducto().getProducto().getId().equals(productoId))
+				.filter(item -> item.getProducto().getId().equals(productoId))
 				.findFirst()
-				.orElseThrow()
+				.orElseThrow();
 	}
 
 	@Override
 	public void actualizaCantidadItem(Long carritoId, Long productoId, int cantidad) {
-		Carrito carrito = carritoServicio.traeCarrrito(carritoId);
+		Carrito carrito = carritoServicio.traeCarrito(carritoId);
 		carrito.getCarritoItems()
 		.stream()
-		.filter(item ->.getProducto().getID().equals(ProductoId))
+		.filter(item ->item.getProducto().getId().equals(productoId))
 		.findFirst()
-		.orElseThrow(() 
+		.orElseThrow();
 		
 		
 	}

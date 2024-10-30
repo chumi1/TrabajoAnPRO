@@ -116,13 +116,14 @@ public class ProductoServicio implements IProductoServicio{
 	public List<ProductoDto> traeProductosConvertidos(List<Producto> productos){
 		return productos.stream().map(this :: convertirAProductoDto).toList();
 	}
+	
 	@Override
-	public ProductoDto convertirAProductoDto(ProductoDto producto) {
+	public ProductoDto convertirAProductoDto(Producto producto) {
 		ProductoDto productoDto = modelMapper.map(producto, ProductoDto.class);
 		List<Imagen> imagenes = imagenRepositorio.findByProductoId(producto.getId());
 		List<ImagenDto> imagenesDto = imagenes
 				.stream()
-				.map(imagen -> modelMapper.map(imagenes, ImagenDto.class))
+				.map(imagen -> modelMapper.map(imagen, ImagenDto.class))
 				.toList();
 		productoDto.setImagenes(imagenesDto);
 		return productoDto;

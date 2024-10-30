@@ -38,9 +38,6 @@ public class CarritoServicio implements ICarritoServicio{
 	public BigDecimal traePrecioTotal(Long id) {
 		Carrito carrito =traeCarrito(id);
 		return carrito.getCostoTotal();
-				.stream()
-				.map(CarritoItem :: getPrecioTot)
-				.reduce(BigDecimal.ZERO, BigDecimal :: add);
 	}
 
 }

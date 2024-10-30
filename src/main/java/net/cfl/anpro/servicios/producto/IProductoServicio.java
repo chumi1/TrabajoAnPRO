@@ -20,6 +20,7 @@ public interface IProductoServicio {
 	List<Producto> listarPorNombre(String nombre);
 	List<Producto> listarPorNombreYMarca(String nombre, String marca);
 	Long contarProductosPorNombreYMarca(String nombre, String marca);
-	ProductoDto convertirAProductoDto(AgregaProductoReq producto);
+	ProductoDto convertirAProductoDto(Producto producto);
 	List<ProductoDto> traeProductosConvertidos(List<Producto> productos);
+	
 }
